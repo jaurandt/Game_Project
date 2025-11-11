@@ -19,6 +19,7 @@ public:
 	void Quit();
 protected:
 	bool m_isRunning = true;
+	
 	std::unique_ptr <GraphicsEngine> m_graphicsEngine;
 	std::unique_ptr<GWindow> m_display;
 

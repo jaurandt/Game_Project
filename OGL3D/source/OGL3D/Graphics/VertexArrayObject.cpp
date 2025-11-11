@@ -15,8 +15,6 @@ VertexArrayObject::VertexArrayObject(const VertexBufferData& data)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, data.vertexSize, 0);
 	glEnableVertexAttribArray(0);
 
-
-
 	glBindVertexArray(0);
 }
 
@@ -24,7 +22,6 @@ VertexArrayObject::~VertexArrayObject()
 {
 	glDeleteBuffers(1, &m_vertexBufferID);
 	glDeleteVertexArrays(1, &m_vertexArrayObjectID);
-
 }
 
 unsigned int VertexArrayObject::getID()
