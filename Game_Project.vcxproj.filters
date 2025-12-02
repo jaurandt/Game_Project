@@ -39,6 +39,9 @@
     <ClCompile Include="OGL3D\source\OGL3D\Graphics\VertexArrayObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OGL3D\source\OGL3D\Graphics\ShaderProgram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OGL3D\include\OGL3D\Window\GWindow.h">
@@ -71,5 +74,12 @@
     <ClInclude Include="OGL3D\include\OGL3D\Prerequisites.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OGL3D\include\OGL3D\Graphics\ShaderProgram.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Shaders\BasicShader.vert" />
+    <None Include="Assets\Shaders\BasicShader.frag" />
   </ItemGroup>
 </Project>

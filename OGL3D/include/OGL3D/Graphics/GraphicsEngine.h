@@ -10,10 +10,12 @@ public:
 	~GraphicsEngine();
 
 	VertexArrayObjectPtr createVertexArrayObject(const VertexBufferData& data);
-
+	ShaderProgramPtr createShaderProgram(const ShaderProgramPath& path);
+	
 	void clear(const Vec4& color);
 	void setViewport(const Rect& size);
 	void setVertexArrayObject(const VertexArrayObjectPtr& vao);
+	void setShaderProgram(const ShaderProgramPtr& shaderProgram);
 	void drawTriangles(unsigned int vertexCount, unsigned int offset);
 };
 

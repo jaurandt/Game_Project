@@ -1,5 +1,6 @@
 #include <OGL3D/Graphics/GraphicsEngine.h>
 #include <OGL3D/Graphics/VertexArrayObject.h>
+#include <OGL3D/Graphics/ShaderProgram.h>
 #include <glad/glad.h>
 #include <glad/glad_wgl.h>
 #include <assert.h>
@@ -75,6 +76,11 @@ VertexArrayObjectPtr GraphicsEngine::createVertexArrayObject(const VertexBufferD
     return std::make_shared<VertexArrayObject>(data);
 }
 
+ShaderProgramPtr GraphicsEngine::createShaderProgram(const ShaderProgramPath& path)
+{
+	return std::make_shared<ShaderProgram>(path);
+}
+
 void GraphicsEngine::clear(const Vec4& color)
 {
     glClearColor(color.x, color.y, color.z, color.w);
@@ -89,6 +95,11 @@ void GraphicsEngine::setViewport(const Rect& size)
 void GraphicsEngine::setVertexArrayObject(const VertexArrayObjectPtr& vao)
 {
     glBindVertexArray(vao->getID());
+}
+
+void GraphicsEngine::setShaderProgram(const ShaderProgramPtr& shaderProgram)
+{
+    glUseProgram(shaderProgram->getID());
 }
 
 void GraphicsEngine::drawTriangles(unsigned int vertexCount, unsigned int offset)

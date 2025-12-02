@@ -24,18 +24,38 @@ void Game::onCreate()
 
 	//m_display->present(false);
 	const float triangleVertices[] = {
-		 -0.5f,  -0.5f, 0.0f,
-		 0.5f,  -0.5f, 0.0f,
-		  0.0f,   0.5f, 0.0f
+		 -0.5f,  -0.5f,  0.0f,
+		  1.0f,   0.0f,  0.0f,
+
+		  0.5f,  -0.5f,  0.0f,
+		  0.0f,   1.0f,  0.0f,
+
+		  0.0f,   0.5f,  0.0f,
+		  0.0f,   0.0f,  1.0f
 	};
 
-	m_triangleVAO = m_graphicsEngine->createVertexArrayObject({(void*)triangleVertices, sizeof(float) * 3, 3});
+	VertexAttribute triangleAttributes[] = {
+		3, // Position
+		3  // Color
+	};
+
+	m_triangleVAO = m_graphicsEngine->createVertexArrayObject({
+		(void*)triangleVertices, 
+		sizeof(float) * (3 + 3) /*3 position elements, 3 color*/,
+		3,
+
+		triangleAttributes,
+		2
+	});
+	m_shaderProgram = m_graphicsEngine->createShaderProgram({L"Assets/Shaders/BasicShader.vert", L"Assets/Shaders/BasicShader.frag"});
 }
 
 void Game::onUpdate()
 {
 	m_graphicsEngine->clear(Vec4(1.0f, 0.0f, 0.0f, 1.0f));
 	m_graphicsEngine->setVertexArrayObject(m_triangleVAO);
+
+	m_graphicsEngine->setShaderProgram(m_shaderProgram);
 
 	m_graphicsEngine->drawTriangles(3, 0);
 	

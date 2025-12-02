@@ -24,4 +24,5 @@ protected:
 	std::unique_ptr<GWindow> m_display;
 
 	VertexArrayObjectPtr m_triangleVAO;
+	ShaderProgramPtr m_shaderProgram;
 };
