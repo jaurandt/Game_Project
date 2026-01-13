@@ -1,7 +1,6 @@
 #include <OGL3D/Graphics/UniformBuffer.h>
 #include <glad/glad.h>
 
-
 UniformBuffer::UniformBuffer(const UniformBufferData& data)
 {
 	glGenBuffers(1, &m_id);

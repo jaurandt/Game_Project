@@ -1,4 +1,5 @@
 #pragma once
+
 #include <OGL3D/Graphics/VertexArrayObject.h>
 #include <memory>
 
@@ -17,6 +18,7 @@ public:
 
 	void Run();
 	void Quit();
+
 protected:
 	bool m_isRunning = true;
 	

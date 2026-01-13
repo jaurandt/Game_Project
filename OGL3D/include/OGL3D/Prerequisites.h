@@ -1,14 +1,14 @@
 #pragma once
+
 #include <memory>
 
 class VertexArrayObject;
 class UniformBuffer;
 class ShaderProgram;
 
-typedef std::shared_ptr<VertexArrayObject> VertexArrayObjectPtr;
-typedef std::shared_ptr<UniformBuffer> UniformBufferPtr;
-typedef std::shared_ptr<ShaderProgram> ShaderProgramPtr;
-
+using VertexArrayObjectPtr = std::shared_ptr<VertexArrayObject>;
+using UniformBufferPtr = std::shared_ptr<UniformBuffer>;
+using ShaderProgramPtr = std::shared_ptr<ShaderProgram>;
 
 struct VertexAttribute
 {

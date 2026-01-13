@@ -1,6 +1,6 @@
 #pragma once
-#include <OGL3D/Prerequisites.h>
 
+#include <OGL3D/Prerequisites.h>
 
 class ShaderProgram
 {

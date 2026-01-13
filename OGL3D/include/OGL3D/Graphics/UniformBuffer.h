@@ -9,8 +9,8 @@ public:
 	~UniformBuffer();
 
 	void setData(void* data);
-	
 	unsigned int getID();
+
 private:
 	unsigned int m_id;
 	unsigned int m_size = 0;

@@ -10,11 +10,9 @@ VertexArrayObject::VertexArrayObject(const VertexBufferData& data)
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
 	
-	//LEFT OFF AT 24:27 
 	glBufferData(GL_ARRAY_BUFFER, data.vertexSize * data.listSize, data.verticesList, GL_STATIC_DRAW);
 	
-
-	for(int i = 0; i < data.attributesListSize; i++)
+	for(unsigned int i = 0; i < data.attributesListSize; i++)
 	{
 		glVertexAttribPointer(
 			i, 
@@ -27,7 +25,6 @@ VertexArrayObject::VertexArrayObject(const VertexBufferData& data)
 		glEnableVertexAttribArray(i);
 	}
 	
-
 	glBindVertexArray(0);
 
 	m_vertexBufferData = data;

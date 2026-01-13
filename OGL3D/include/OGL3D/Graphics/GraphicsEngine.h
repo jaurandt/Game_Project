@@ -1,4 +1,5 @@
 #pragma once
+
 #include <OGL3D/Prerequisites.h>
 #include <OGL3D/Math/Vec4.h>
 #include <OGL3D/Math/Rect.h>

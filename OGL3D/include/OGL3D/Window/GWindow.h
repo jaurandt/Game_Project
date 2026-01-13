@@ -1,4 +1,5 @@
 #pragma once
+
 #include <OGL3D/Math/Rect.h>
 
 class GWindow
@@ -11,6 +12,7 @@ public:
 
 	void makeCurrentContext();
 	void present(bool vsync);
+
 private:
 	void* m_handle = nullptr;
 	void* m_deviceContext = nullptr;

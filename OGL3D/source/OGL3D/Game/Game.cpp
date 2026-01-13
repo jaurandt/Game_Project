@@ -86,7 +86,7 @@ void Game::onCreate()
 
 void Game::onUpdate()
 {
-	UniformData data = { 1.0f };
+	UniformData data = { 0.25f };
 	m_uniformBuffer->setData(&data);
 
 	m_graphicsEngine->clear(Vec4(0.0f, 0.0f, 0.0f, 0.0f));
