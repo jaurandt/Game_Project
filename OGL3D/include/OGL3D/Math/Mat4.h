@@ -44,6 +44,26 @@ public:
 		m_values[2][2] = c;
 	}
 
+	void setRotationY(float angle)
+	{
+		float c = cosf(angle);
+		float s = sinf(angle);
+		m_values[0][0] = c;
+		m_values[0][2] = -s;
+		m_values[2][0] = s;
+		m_values[2][2] = c;
+	}
+
+	void setRotationZ(float angle)
+	{
+		float c = cosf(angle);
+		float s = sinf(angle);
+		m_values[0][0] = c;
+		m_values[0][1] = s;
+		m_values[1][0] = -s;
+		m_values[1][1] = c;
+	}
+
 	void operator *=(const Mat4& other)
 	{
 		Mat4 result;

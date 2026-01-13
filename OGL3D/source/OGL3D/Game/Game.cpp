@@ -113,6 +113,10 @@ void Game::onUpdate()
 	trans.setTranslation(Vec4(m_scale * 0.05f, m_scale * 0.05f, 0.0f, 1.0f));
 	worldMatrix *= trans;
 
+	trans.setIdentity();
+	trans.setRotationX(m_scale);
+	worldMatrix *= trans;
+
 	//worldMatrix.setScale(Vec4(sineScale, sineScale, sineScale, 1.0f));
 	
 	UniformData data = { worldMatrix };
