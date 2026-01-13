@@ -2,10 +2,13 @@
 #include <memory>
 
 class VertexArrayObject;
+class UniformBuffer;
 class ShaderProgram;
 
 typedef std::shared_ptr<VertexArrayObject> VertexArrayObjectPtr;
+typedef std::shared_ptr<UniformBuffer> UniformBufferPtr;
 typedef std::shared_ptr<ShaderProgram> ShaderProgramPtr;
+
 
 struct VertexAttribute
 {
@@ -28,10 +31,19 @@ struct ShaderProgramPath
 	const wchar_t* fragmentShaderFilePath;
 };
 
+struct UniformBufferData
+{
+	unsigned int size = 0;
+};
+
+enum TriangleType 
+{
+	TriangleList = 0,
+	TriangleStrip
+};
+
 enum ShaderType
 {
 	VertexShader = 0,
 	FragmentShader
 };
-
-//LEFT OFF AT 37:43 in Shaders

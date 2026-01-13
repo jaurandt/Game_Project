@@ -2,7 +2,19 @@
 #include <OGL3D/Math/Vec4.h>
 #include <OGL3D/Window/GWindow.h>
 #include <OGL3D/Graphics/GraphicsEngine.h>
+#include <OGL3D/Graphics/ShaderProgram.h>
+#include <OGL3D/Graphics/UniformBuffer.h>
 #include <windows.h>
+
+struct UniformData
+{
+	float scale;
+	/*
+	Mat4 model;
+	Mat4 view;
+	Mat4 projection;
+	*/
+};
 
 Game::Game()
 {
@@ -23,6 +35,7 @@ void Game::onCreate()
 	//m_graphicsEngine->clear(Vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
 	//m_display->present(false);
+	/*
 	const float triangleVertices[] = {
 		 -0.5f,  -0.5f,  0.0f,
 		  1.0f,   0.0f,  0.0f,
@@ -33,31 +46,55 @@ void Game::onCreate()
 		  0.0f,   0.5f,  0.0f,
 		  0.0f,   0.0f,  1.0f
 	};
+	*/
 
-	VertexAttribute triangleAttributes[] = {
+	const float polygonVertices[] = {
+		 -0.5f,  -0.5f,  0.0f,
+		  1.0f,   0.0f,  0.0f,
+		  
+		 -0.5f,   0.5f,  0.0f,
+		  0.0f,   1.0f,  0.0f,
+		  
+		  0.5f,  -0.5f,  0.0f,
+		  0.0f,   0.0f,  1.0f,
+		 
+		  0.5f,   0.5f,  0.0f,
+		  1.0f,   1.0f,  0.0f
+	};
+
+	VertexAttribute polyAttributes[] = {
 		3, // Position
 		3  // Color
 	};
 
-	m_triangleVAO = m_graphicsEngine->createVertexArrayObject({
-		(void*)triangleVertices, 
+	m_polygonVAO = m_graphicsEngine->createVertexArrayObject({
+		(void*)polygonVertices, 
 		sizeof(float) * (3 + 3) /*3 position elements, 3 color*/,
-		3,
-
-		triangleAttributes,
+		4,
+		polyAttributes,
 		2
 	});
+
+	m_uniformBuffer = m_graphicsEngine->createUniformBuffer({
+		sizeof(UniformData)
+	});
+
 	m_shaderProgram = m_graphicsEngine->createShaderProgram({L"Assets/Shaders/BasicShader.vert", L"Assets/Shaders/BasicShader.frag"});
+	//m_graphicsEngine->setShaderProgram(m_shaderProgram);
+	m_shaderProgram->setUniformBufferSlot("UniformData", 0);
 }
 
 void Game::onUpdate()
 {
-	m_graphicsEngine->clear(Vec4(1.0f, 0.0f, 0.0f, 1.0f));
-	m_graphicsEngine->setVertexArrayObject(m_triangleVAO);
+	UniformData data = { 1.0f };
+	m_uniformBuffer->setData(&data);
 
+	m_graphicsEngine->clear(Vec4(0.0f, 0.0f, 0.0f, 0.0f));
+	
+	m_graphicsEngine->setVertexArrayObject(m_polygonVAO);
+	m_graphicsEngine->setUniformBuffer(m_uniformBuffer, 0);
 	m_graphicsEngine->setShaderProgram(m_shaderProgram);
-
-	m_graphicsEngine->drawTriangles(3, 0);
+	m_graphicsEngine->drawTriangles(TriangleStrip, 4, 0);
 	
 	m_display->present(true);
 }

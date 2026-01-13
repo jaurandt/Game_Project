@@ -23,6 +23,7 @@ protected:
 	std::unique_ptr <GraphicsEngine> m_graphicsEngine;
 	std::unique_ptr<GWindow> m_display;
 
-	VertexArrayObjectPtr m_triangleVAO;
+	VertexArrayObjectPtr m_polygonVAO;
+	UniformBufferPtr m_uniformBuffer;
 	ShaderProgramPtr m_shaderProgram;
 };

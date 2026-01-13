@@ -21,6 +21,12 @@ ShaderProgram::~ShaderProgram()
 	glDeleteProgram(m_programID);
 }
 
+void ShaderProgram::setUniformBufferSlot(const char* uniformName, unsigned int bindingSlot)
+{
+	unsigned int index = glGetUniformBlockIndex(m_programID, uniformName);
+	glUniformBlockBinding(m_programID, index, bindingSlot);
+}
+
 void ShaderProgram::attach(const wchar_t* filePath, ShaderType shaderType)
 {
 	std::ifstream fileStream(filePath);

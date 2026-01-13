@@ -1,5 +1,6 @@
 #include <OGL3D/Graphics/GraphicsEngine.h>
 #include <OGL3D/Graphics/VertexArrayObject.h>
+#include <OGL3D/Graphics/UniformBuffer.h>
 #include <OGL3D/Graphics/ShaderProgram.h>
 #include <glad/glad.h>
 #include <glad/glad_wgl.h>
@@ -76,6 +77,11 @@ VertexArrayObjectPtr GraphicsEngine::createVertexArrayObject(const VertexBufferD
     return std::make_shared<VertexArrayObject>(data);
 }
 
+UniformBufferPtr GraphicsEngine::createUniformBuffer(const UniformBufferData& data)
+{
+	return std::make_shared<UniformBuffer>(data);
+}
+
 ShaderProgramPtr GraphicsEngine::createShaderProgram(const ShaderProgramPath& path)
 {
 	return std::make_shared<ShaderProgram>(path);
@@ -97,14 +103,34 @@ void GraphicsEngine::setVertexArrayObject(const VertexArrayObjectPtr& vao)
     glBindVertexArray(vao->getID());
 }
 
+void GraphicsEngine::setUniformBuffer(const UniformBufferPtr& uniformBuffer, unsigned int bindingSlot)
+{
+	glBindBufferBase(GL_UNIFORM_BUFFER, bindingSlot, uniformBuffer->getID());
+}
+
 void GraphicsEngine::setShaderProgram(const ShaderProgramPtr& shaderProgram)
 {
     glUseProgram(shaderProgram->getID());
 }
 
-void GraphicsEngine::drawTriangles(unsigned int vertexCount, unsigned int offset)
+void GraphicsEngine::drawTriangles(const TriangleType& triangleType, unsigned int vertexCount, unsigned int offset)
 {
-    glDrawArrays(GL_TRIANGLES, offset, vertexCount);
+    auto glTriType = GL_TRIANGLES;
+
+    switch(triangleType)
+    {
+        case TriangleList:
+            glTriType = GL_TRIANGLES;
+            break;
+        case TriangleStrip:
+            glTriType = GL_TRIANGLE_STRIP;
+            break;
+        default:
+            glTriType = GL_TRIANGLES;
+            break;
+	}
+    
+    glDrawArrays(glTriType, offset, vertexCount);
 }
 
 /*************************

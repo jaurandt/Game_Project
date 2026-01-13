@@ -12,6 +12,5 @@ private:
 	unsigned int m_vertexBufferID = 0;
 	unsigned int m_vertexArrayObjectID = 0;
 	VertexBufferData m_vertexBufferData;
-
 };
 

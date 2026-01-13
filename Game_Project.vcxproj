@@ -149,10 +149,12 @@
     <ClCompile Include="OGL3D\source\OGL3D\Math\Vec4.cpp" />
     <ClCompile Include="OGL3D\source\OGL3D\Graphics\VertexArrayObject.cpp" />
     <ClCompile Include="OGL3D\source\OGL3D\Graphics\ShaderProgram.cpp" />
+    <ClCompile Include="OGL3D\source\OGL3D\Graphics\UniformBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OGL3D\include\OGL3D\Graphics\GraphicsEngine.h" />
     <ClInclude Include="OGL3D\include\OGL3D\Game\Game.h" />
+    <ClInclude Include="OGL3D\include\OGL3D\Math\Mat4.h" />
     <ClInclude Include="OGL3D\include\OGL3D\Math\Rect.h" />
     <ClInclude Include="OGL3D\include\OGL3D\Prerequisites.h" />
     <ClInclude Include="OGL3D\include\OGL3D\Window\GWindow.h" />
@@ -162,6 +164,8 @@
     <ClInclude Include="OGL3D\include\OGL3D\Math\Vec4.h" />
     <ClInclude Include="OGL3D\include\OGL3D\Graphics\VertexArrayObject.h" />
     <ClInclude Include="OGL3D\include\OGL3D\Graphics\ShaderProgram.h" />
+    <ClInclude Include="OGL3D\vendor\stb_img\stb_image.h" />
+    <ClInclude Include="OGL3D\include\OGL3D\Graphics\UniformBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\BasicShader.frag" />

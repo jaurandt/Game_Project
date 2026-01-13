@@ -2,7 +2,8 @@
 #include <iostream>
 
 
-int main() {
+int main() 
+{
 	std::cout << "Welcome to the Game!" << std::endl;
 
 	try
