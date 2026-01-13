@@ -2,6 +2,7 @@
 
 #include <OGL3D/Graphics/VertexArrayObject.h>
 #include <memory>
+#include <chrono>
 
 class GraphicsEngine;
 class GWindow;
@@ -24,6 +25,9 @@ protected:
 	
 	std::unique_ptr <GraphicsEngine> m_graphicsEngine;
 	std::unique_ptr<GWindow> m_display;
+
+	std::chrono::high_resolution_clock::time_point m_previousTime;
+	float m_scale = 0.0f;
 
 	VertexArrayObjectPtr m_polygonVAO;
 	UniformBufferPtr m_uniformBuffer;

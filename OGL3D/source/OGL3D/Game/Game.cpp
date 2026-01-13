@@ -4,11 +4,14 @@
 #include <OGL3D/Graphics/GraphicsEngine.h>
 #include <OGL3D/Graphics/ShaderProgram.h>
 #include <OGL3D/Graphics/UniformBuffer.h>
+#include <OGL3D/Math/Mat4.h>
 #include <windows.h>
 
 struct UniformData
 {
-	float scale;
+	Mat4 world;
+	
+	//float scale;
 	/*
 	Mat4 model;
 	Mat4 view;
@@ -86,7 +89,33 @@ void Game::onCreate()
 
 void Game::onUpdate()
 {
-	UniformData data = { 0.25f };
+	auto currentTime = std::chrono::high_resolution_clock::now();
+	auto elapsedSeconds = std::chrono::duration<double>();
+	if (m_previousTime.time_since_epoch().count())
+	{
+		elapsedSeconds = currentTime - m_previousTime;
+	}
+	
+	m_previousTime = currentTime;
+
+	auto deltaTime = static_cast<float>(elapsedSeconds.count());
+
+	m_scale += 3.1415927f * deltaTime;
+	auto sineScale = abs(sinf(m_scale));
+	
+	Mat4 worldMatrix, trans;
+
+	trans.setIdentity();
+	trans.setScale(Vec4(sineScale, sineScale, sineScale, 1));
+	worldMatrix *= trans;
+
+	trans.setIdentity();
+	trans.setTranslation(Vec4(m_scale * 0.05f, m_scale * 0.05f, 0.0f, 1.0f));
+	worldMatrix *= trans;
+
+	//worldMatrix.setScale(Vec4(sineScale, sineScale, sineScale, 1.0f));
+	
+	UniformData data = { worldMatrix };
 	m_uniformBuffer->setData(&data);
 
 	m_graphicsEngine->clear(Vec4(0.0f, 0.0f, 0.0f, 0.0f));

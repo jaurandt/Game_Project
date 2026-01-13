@@ -107,7 +107,6 @@ Rect GWindow::getInnerSize()
 	RECT rc = {};
     GetClientRect(HWND(m_handle), &rc);
 	return Rect(rc.right - rc.left, rc.bottom - rc.top);
-	
 }
 
 void GWindow::makeCurrentContext()
