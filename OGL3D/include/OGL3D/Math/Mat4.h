@@ -2,6 +2,7 @@
 
 #include <OGL3D/Prerequisites.h>
 #include <OGL3D/Math/Vec4.h>
+#include <cmath>
 
 class Mat4
 {
@@ -81,6 +82,49 @@ public:
 		::memcpy(m_values, result.m_values, sizeof(float) * 16);
 	}
 
+	// Build a perspective projection (row-major layout)
+	// fovY in radians, aspect = width / height, znear > 0, zfar > znear
+	void setPerspective(float fovY, float aspect, float nearZ, float farZ)
+	{
+		float f = 1.0f / tanf(fovY * 0.5f);
+		::memset(m_values, 0, sizeof(float) * 16);
+		m_values[0][0] = f / aspect;
+		m_values[1][1] = f;
+		m_values[2][2] = (farZ + nearZ) / (nearZ - farZ);
+		m_values[2][3] = (2.0f * farZ * nearZ) / (nearZ - farZ);
+		m_values[3][2] = -1.0f;
+	}
+
+	void setLookAt(const Vec4& eye, const Vec4& center, const Vec4& up)
+	{
+		// forward = normalize(center - eye)
+		float fx = center.x - eye.x;
+		float fy = center.y - eye.y;
+		float fz = center.z - eye.z;
+		float fLen = sqrtf(fx * fx + fy * fy + fz * fz);
+		if (fLen > 1e-6f) { fx /= fLen; fy /= fLen; fz /= fLen; }
+
+		// right = normalize(cross(forward, up))
+		float rx = fy * up.z - fz * up.y;
+		float ry = fz * up.x - fx * up.z;
+		float rz = fx * up.y - fy * up.x;
+		float rLen = sqrtf(rx * rx + ry * ry + rz * rz);
+		if (rLen > 1e-6f) { rx /= rLen; ry /= rLen; rz /= rLen; }
+		
+		// up' = cross(right, forward)
+		float ux = ry * fz - rz * fy;
+		float uy = rz * fx - rx * fz;
+		float uz = rx * fy - ry * fx;
+
+		setIdentity();
+
+		// Row-major lookAt matrix (works with row-vector: vec * view)
+		m_values[0][0] = rx;   m_values[0][1] = ry;   m_values[0][2] = rz;   m_values[0][3] = -(rx * eye.x + ry * eye.y + rz * eye.z);
+		m_values[1][0] = ux;   m_values[1][1] = uy;   m_values[1][2] = uz;   m_values[1][3] = -(ux * eye.x + uy * eye.y + uz * eye.z);
+		m_values[2][0] = -fx;  m_values[2][1] = -fy;  m_values[2][2] = -fz;  m_values[2][3] =  (fx * eye.x + fy * eye.y + fz * eye.z);
+		m_values[3][0] = 0.0f; m_values[3][1] = 0.0f; m_values[3][2] = 0.0f; m_values[3][3] = 1.0f;
+	}
+	
 	// <-- 17:12 #6 -->
 
 	~Mat4()

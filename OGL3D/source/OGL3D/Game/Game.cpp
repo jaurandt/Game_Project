@@ -10,7 +10,8 @@
 struct UniformData
 {
 	Mat4 world;
-	
+	Mat4 view;
+	Mat4 projection;
 	//float scale;
 	/*
 	Mat4 model;
@@ -85,6 +86,22 @@ void Game::onCreate()
 	m_shaderProgram = m_graphicsEngine->createShaderProgram({L"Assets/Shaders/BasicShader.vert", L"Assets/Shaders/BasicShader.frag"});
 	//m_graphicsEngine->setShaderProgram(m_shaderProgram);
 	m_shaderProgram->setUniformBufferSlot("UniformData", 0);
+
+	auto windowSize = m_display->getInnerSize();
+	float aspect = 1.0f;
+	if(windowSize.height != 0)
+	{
+		aspect = static_cast<float>(windowSize.width) / static_cast<float>(windowSize.height);
+	}
+
+	float fovRadians = 45.0f * (3.1415927f / 180.0f);
+	m_projectionMatrix.setPerspective(fovRadians, aspect, 0.01f, 100.0f);
+	
+	m_viewMatrix.setLookAt(
+		Vec4(2.0f, 0.0f, 3.0f, 1.0f), // Eye
+		Vec4(0.0f, 0.0f, 0.0f, 1.0f), // Center
+		Vec4(0.0f, 1.0f, 0.0f, 1.0f)  // Up
+	);
 }
 
 void Game::onUpdate()
@@ -106,20 +123,20 @@ void Game::onUpdate()
 	Mat4 worldMatrix, trans;
 
 	trans.setIdentity();
-	trans.setScale(Vec4(sineScale, sineScale, sineScale, 1));
+	trans.setScale(Vec4(1.0f, 1.0f, 1.0f, 1.0f)); //sineScale
 	worldMatrix *= trans;
 
 	trans.setIdentity();
-	trans.setTranslation(Vec4(m_scale * 0.05f, m_scale * 0.05f, 0.0f, 1.0f));
+	trans.setTranslation(Vec4(0.0f, 0.0f, 0.0f, 1.0f));
 	worldMatrix *= trans;
-
+	/*
 	trans.setIdentity();
 	trans.setRotationX(m_scale);
 	worldMatrix *= trans;
-
+	*/
 	//worldMatrix.setScale(Vec4(sineScale, sineScale, sineScale, 1.0f));
 	
-	UniformData data = { worldMatrix };
+	UniformData data = { worldMatrix, m_viewMatrix, m_projectionMatrix};
 	m_uniformBuffer->setData(&data);
 
 	m_graphicsEngine->clear(Vec4(0.0f, 0.0f, 0.0f, 0.0f));
