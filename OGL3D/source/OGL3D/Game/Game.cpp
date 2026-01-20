@@ -12,12 +12,6 @@ struct UniformData
 	Mat4 world;
 	Mat4 view;
 	Mat4 projection;
-	//float scale;
-	/*
-	Mat4 model;
-	Mat4 view;
-	Mat4 projection;
-	*/
 };
 
 Game::Game()
