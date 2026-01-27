@@ -8,7 +8,7 @@ int main()
 
 	try
 	{
-		Game game;
+		Game game; // default Game constructor
 		game.Run();
 	}
 	catch (const std::exception& e)

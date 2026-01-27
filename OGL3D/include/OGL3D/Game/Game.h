@@ -15,7 +15,7 @@ public:
 	~Game();
 
 	virtual void onCreate();
-	virtual void onUpdate();
+	virtual void onUpdate(InputMouse mouse);
 	virtual void onQuit();
 
 	void Run();

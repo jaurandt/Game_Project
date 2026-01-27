@@ -68,9 +68,9 @@ void Game::onCreate()
 	m_polygonVAO = m_graphicsEngine->createVertexArrayObject({
 		(void*)polygonVertices, 
 		sizeof(float) * (3 + 3) /*3 position elements, 3 color*/,
-		4,
+		4, // number of vertices
 		polyAttributes,
-		2
+		2 // number of attributes
 	});
 
 	m_uniformBuffer = m_graphicsEngine->createUniformBuffer({
@@ -98,7 +98,7 @@ void Game::onCreate()
 	);
 }
 
-void Game::onUpdate()
+void Game::onUpdate(InputMouse mouse)
 {
 	auto currentTime = std::chrono::high_resolution_clock::now();
 	auto elapsedSeconds = std::chrono::duration<double>();
@@ -114,8 +114,17 @@ void Game::onUpdate()
 	m_scale += 3.1415927f * deltaTime;
 	auto sineScale = abs(sinf(m_scale));
 	
+	if (mouse == InputMouse::LeftButtonDown)
+	{
+		m_viewMatrix.setLookAt(
+			Vec4(2.0f * sineScale, 0.0f, 3.0f, 1.0f), // Eye
+			Vec4(0.0f, 0.0f, 0.0f, 1.0f), // Center
+			Vec4(0.0f, 1.0f, 0.0f, 1.0f)  // Up
+		);
+	}
+	
 	Mat4 worldMatrix, trans;
-
+	
 	trans.setIdentity();
 	trans.setScale(Vec4(1.0f, 1.0f, 1.0f, 1.0f)); //sineScale
 	worldMatrix *= trans;
@@ -151,24 +160,38 @@ void Game::Run()
 {
 	onCreate();
 	MSG msg;
+	InputMouse mouse = InputMouse::NoButtonDown;
 
 	while(m_isRunning)
 	{
 		if(PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 		{
-			if(msg.message == WM_QUIT)
+			switch (msg.message)
 			{
-				m_isRunning = false;
-				continue;
-			}
-			else
-			{
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
+				case WM_QUIT:
+				{
+					m_isRunning = false;
+					continue;
+				}
+				case WM_LBUTTONDOWN:
+				{
+					mouse = InputMouse::LeftButtonDown;
+					break;
+				}
+				case WM_LBUTTONUP:
+				{
+					mouse = InputMouse::NoButtonDown;
+					break;
+				}
+				default: 
+				{
+					TranslateMessage(&msg);
+					DispatchMessage(&msg);
+				}
 			}
 		}
 		
-		onUpdate();
+		onUpdate(mouse);
 	}
 
 	onQuit();

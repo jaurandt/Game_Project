@@ -47,3 +47,10 @@ enum ShaderType
 	VertexShader = 0,
 	FragmentShader
 };
+
+enum class InputMouse
+{
+	LeftButtonDown,
+	RightButtonDown,
+	NoButtonDown
+};
