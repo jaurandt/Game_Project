@@ -90,7 +90,7 @@ ShaderProgramPtr GraphicsEngine::createShaderProgram(const ShaderProgramPath& pa
 void GraphicsEngine::clear(const Vec4& color)
 {
     glClearColor(color.x, color.y, color.z, color.w);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void GraphicsEngine::setViewport(const Rect& size)
@@ -130,7 +130,13 @@ void GraphicsEngine::drawTriangles(const TriangleType& triangleType, unsigned in
             break;
 	}
     
-    glDrawArrays(glTriType, offset, vertexCount);
+    glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+    //glDrawArrays(glTriType, offset, vertexCount);
+
+
 }
 
 /*************************

@@ -94,6 +94,9 @@ GWindow::GWindow()
 
 	m_deviceContext = wglCreateContextAttribsARB(hDC, 0, openGLContextAttributes);
 	assert(m_deviceContext);
+
+	glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
 }
 
 GWindow::~GWindow()

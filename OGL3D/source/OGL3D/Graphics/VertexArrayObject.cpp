@@ -4,14 +4,17 @@
 VertexArrayObject::VertexArrayObject(const VertexBufferData& data)
 {
 	glGenBuffers(1, &m_vertexBufferID);
+	glGenBuffers(1, &m_elementBufferID);
 
 	glGenVertexArrays(1, &m_vertexArrayObjectID);
 	glBindVertexArray(m_vertexArrayObjectID);
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
-	
 	glBufferData(GL_ARRAY_BUFFER, data.vertexSize * data.listSize, data.verticesList, GL_STATIC_DRAW);
 	
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_elementBufferID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * 36, data.indicesList, GL_STATIC_DRAW);
+
 	for(unsigned int i = 0; i < data.attributesListSize; i++)
 	{
 		glVertexAttribPointer(
@@ -34,6 +37,8 @@ VertexArrayObject::~VertexArrayObject()
 {
 	glDeleteBuffers(1, &m_vertexBufferID);
 	glDeleteVertexArrays(1, &m_vertexArrayObjectID);
+
+	glDeleteBuffers(1, &m_elementBufferID);
 }
 
 unsigned int VertexArrayObject::getID()

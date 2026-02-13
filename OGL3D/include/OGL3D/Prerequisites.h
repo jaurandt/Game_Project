@@ -18,6 +18,7 @@ struct VertexAttribute
 struct VertexBufferData
 {
 	void* verticesList = nullptr;
+	void* indicesList = nullptr;
 	unsigned int vertexSize = 0;
 	unsigned int listSize = 0;
 
