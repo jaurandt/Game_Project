@@ -1,7 +1,6 @@
 #include <OGL3D/Game/Game.h>
 #include <iostream>
 
-
 int main() 
 {
 	std::cout << "Welcome to the Game!" << std::endl;

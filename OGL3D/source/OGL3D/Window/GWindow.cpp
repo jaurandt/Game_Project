@@ -45,8 +45,7 @@ GWindow::GWindow()
     auto classID = RegisterClassExW(&wcex);
     assert(classID);
 
-	RECT rect = { 0, 0, 800, 600 };
-
+    RECT rect = { 0, 0, 800, 600 };
 	AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW | WS_CAPTION | WS_SYSMENU, FALSE);
 
     m_handle = CreateWindowExW(0, MAKEINTATOM(classID), L"OpenGL Window", WS_OVERLAPPEDWINDOW | WS_CAPTION | WS_SYSMENU,
@@ -62,6 +61,7 @@ GWindow::GWindow()
     //Creating OpenGL Rendering Context
 
 	auto hDC = GetDC(HWND(m_handle));
+    m_deviceContextHandle = hDC;
 
     int pixelFormatAttributes[] =     {
         WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
@@ -103,6 +103,10 @@ GWindow::~GWindow()
 {
 	wglDeleteContext(HGLRC(m_deviceContext));
 	DestroyWindow((HWND)m_handle);
+    if(m_deviceContextHandle)
+    {
+        ReleaseDC((HWND)m_handle, HDC(m_deviceContextHandle));
+	}
 }
 
 Rect GWindow::getInnerSize()
@@ -114,11 +118,11 @@ Rect GWindow::getInnerSize()
 
 void GWindow::makeCurrentContext()
 {
-	wglMakeCurrent(GetDC(HWND(m_handle)), HGLRC(m_deviceContext));
+	wglMakeCurrent(HDC(m_deviceContextHandle), HGLRC(m_deviceContext));
 }
 
 void GWindow::present(bool vsync)
 {
     wglSwapIntervalEXT(vsync);
-	wglSwapLayerBuffers(GetDC(HWND(m_handle)), WGL_SWAP_MAIN_PLANE);
+	wglSwapLayerBuffers(HDC(m_deviceContextHandle), WGL_SWAP_MAIN_PLANE);
 }

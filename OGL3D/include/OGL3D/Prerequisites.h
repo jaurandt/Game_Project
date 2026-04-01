@@ -19,8 +19,10 @@ struct VertexBufferData
 {
 	void* verticesList = nullptr;
 	void* indicesList = nullptr;
-	unsigned int vertexSize = 0;
-	unsigned int listSize = 0;
+
+	unsigned int vertexSize = 0; // Size of a single vertex in bytes
+	unsigned int vertexCount = 0; // Number of vertices in the list
+	unsigned int indexCount = 0; // Number of indices in the list
 
 	VertexAttribute* attributesList = nullptr;
 	unsigned int attributesListSize = 0;

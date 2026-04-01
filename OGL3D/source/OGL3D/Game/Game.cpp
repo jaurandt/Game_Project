@@ -61,18 +61,19 @@ void Game::onCreate()
 	};
 	*/
 	
+
 	const float vertices[] = {
 		-0.5f, -0.5f,  0.5f, // 0
-		 1.0f,  0.0f,  0.0f,
+		 0.0f,  0.0f,  1.0f,
 
 		-0.5f,  0.5f,  0.5f, // 1
-		 1.0f,  0.0f,  0.0f,
+		 0.0f,  0.0f,  1.0f,
 
 		 0.5f,  0.5f,  0.5f, // 2
-		 1.0f,  0.0f,  0.0f,
+		 0.0f,  0.0f,  1.0f,
 
 		 0.5f, -0.5f,  0.5f, // 3
-		 1.0f,  0.0f,  0.0f,
+		 0.0f,  0.0f,  1.0f,
 
 		 0.5f, -0.5f, -0.5f, // 4
 		 0.0f,  1.0f,  0.0f,
@@ -116,8 +117,9 @@ void Game::onCreate()
 	m_polygonVAO = m_graphicsEngine->createVertexArrayObject({
 		(void*)vertices,
 		(void*)indices,
-		sizeof(float) * (3 + 3) /*3 position elements, 3 color*/,
-		8, // number of vertices
+		sizeof(float) * (3 + 3), //3 position elements, 3 color, vertexSize
+		8, // number of vertices, vertexCount
+		36, // number of indices, indexCount
 		polyAttributes,
 		2 // number of attributes
 	});
@@ -138,9 +140,18 @@ void Game::onCreate()
 	}
 
 	float fovRadians = 45.0f * (3.1415927f / 180.0f);
-	m_projectionMatrix.setPerspective(fovRadians, aspect, 0.01f, 100.0f);
 	
-	m_viewMatrix.setLookAt(
+	/////////////////////////////////////////////////////////////////////////
+	//*****TO DO: Create an object class that has its own matrices and data//
+	/////////////////////////////////////////////////////////////////////////
+	m_projectionMatrix = std::make_unique<Mat4>();
+	m_viewMatrix = std::make_unique<Mat4>();
+	m_worldMatrix = std::make_unique<Mat4>();
+	m_trans = std::make_unique<Mat4>();
+	
+	m_projectionMatrix->setPerspective(fovRadians, aspect, 0.01f, 100.0f);
+	
+	m_viewMatrix->setLookAt(
 		Vec4(0.0f, 0.0f, 3.0f, 1.0f), // Eye
 		Vec4(0.0f, 0.0f, 0.0f, 1.0f), // Center
 		Vec4(0.0f, 1.0f, 0.0f, 1.0f)  // Up
@@ -149,51 +160,62 @@ void Game::onCreate()
 
 void Game::onUpdate(InputMouse mouse)
 {
-	auto currentTime = std::chrono::high_resolution_clock::now();
-	auto elapsedSeconds = std::chrono::duration<double>();
+	m_currentTime = std::chrono::high_resolution_clock::now();
+
 	if (m_previousTime.time_since_epoch().count())
 	{
-		elapsedSeconds = currentTime - m_previousTime;
+		m_elapsedSeconds = m_currentTime - m_previousTime;
 	}
 	
-	m_previousTime = currentTime;
+	m_previousTime = m_currentTime;
 
-	auto deltaTime = static_cast<float>(elapsedSeconds.count());
+	auto deltaTime = static_cast<float>(m_elapsedSeconds.count());
 
 	m_scale += 3.14f * deltaTime;
+	m_scale *= 0.5f;
 	float sinScale = sinf(m_scale);
 	float cosScale = cosf(m_scale);
 	
 	if (mouse == InputMouse::LeftButtonDown)
 	{
-		m_viewMatrix.setLookAt(
-			Vec4(/*1.0f * sinScale*/ 0.0f, 0.0f, /*3.0f * cosScale*/ 3.0f, 1.0f), // Eye
+		m_viewMatrix->setLookAt(
+			Vec4(/*1.0f * sinScale*/ 3.0f, 0.0f, /*3.0f * cosScale*/ 3.0f, 1.0f), // Eye
 			Vec4(0.0f, 0.0f, 0.0f, 1.0f), // Center
 			Vec4(0.0f, 1.0f, 0.0f, 1.0f)  // Up
 		);
 	}
 	
-	Mat4 worldMatrix, trans;
+	//Mat4 worldMatrix, trans;
 	
-	trans.setIdentity();
-	trans.setScale(Vec4(1.0f, 1.0f, 1.0f, 1.0f)); //sineScale
-	worldMatrix *= trans;
-
-	trans.setIdentity();
-	trans.setTranslation(Vec4(0.0f, 0.0f, 0.0f, 1.0f));
-	worldMatrix *= trans;
-	
+	/////////////////////////////////
+	//SCALE MATRIX///////////////////
+	/////////////////////////////////
 	//trans.setIdentity();
-	//trans.setRotationX(m_scale);
+	//trans.setScale(Vec4(1.0f, 1.0f, 1.0f, 1.0f)); //sineScale
 	//worldMatrix *= trans;
 
-	trans.setIdentity();
-	trans.setRotationY(m_scale);
-	worldMatrix *= trans;
+	/////////////////////////////////
+	//TRANSLATION MATRIX/////////////
+	/////////////////////////////////
+	//trans.setIdentity();
+	//trans.setTranslation(Vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	//worldMatrix *= trans;
 	
-	//worldMatrix.setScale(Vec4(sinScale, sinScale, sinScale, 1.0f));
+	/////////////////////////////////
+	//ROTATION MATRIX AROUND X AXIS//
+	/////////////////////////////////
+	m_trans->setIdentity();
+	m_trans->setRotationX(m_scale);
+	*m_worldMatrix *= *m_trans;
+
+	/////////////////////////////////
+	//ROTATION MATRIX AROUND Y AXIS//
+	/////////////////////////////////
+	//m_trans->setIdentity();
+	//m_trans->setRotationY(m_scale);
+	//*m_worldMatrix *= *m_trans;
 	
-	UniformData data = {worldMatrix, m_viewMatrix, m_projectionMatrix};
+	UniformData data = {*m_worldMatrix, *m_viewMatrix, *m_projectionMatrix};
 	m_uniformBuffer->setData(&data);
 
 	m_graphicsEngine->clear(Vec4(0.0f, 0.0f, 0.0f, 0.0f));

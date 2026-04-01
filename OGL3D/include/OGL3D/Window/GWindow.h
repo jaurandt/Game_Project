@@ -16,5 +16,6 @@ public:
 private:
 	void* m_handle = nullptr;
 	void* m_deviceContext = nullptr;
+	void* m_deviceContextHandle = nullptr;
 };
 

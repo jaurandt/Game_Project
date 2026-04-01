@@ -24,14 +24,18 @@ public:
 protected:
 	bool m_isRunning = true;
 	
-	std::unique_ptr <GraphicsEngine> m_graphicsEngine;
+	std::unique_ptr<GraphicsEngine> m_graphicsEngine;
 	std::unique_ptr<GWindow> m_display;
 
+	std::chrono::high_resolution_clock::time_point m_currentTime;
 	std::chrono::high_resolution_clock::time_point m_previousTime;
+	std::chrono::duration<double> m_elapsedSeconds;
 	float m_scale = 0.0f;
 
-	Mat4 m_projectionMatrix;
-	Mat4 m_viewMatrix;
+	std::unique_ptr<Mat4> m_projectionMatrix;
+	std::unique_ptr<Mat4> m_viewMatrix;
+	std::unique_ptr<Mat4> m_worldMatrix;
+	std::unique_ptr<Mat4> m_trans;
 
 	VertexArrayObjectPtr m_polygonVAO;
 	UniformBufferPtr m_uniformBuffer;

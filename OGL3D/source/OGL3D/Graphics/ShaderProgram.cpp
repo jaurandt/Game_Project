@@ -31,25 +31,13 @@ void ShaderProgram::attach(const wchar_t* filePath, ShaderType shaderType)
 {
 	std::ifstream fileStream(filePath);
 	std::string shaderCode;
+
 	if (fileStream.is_open())
 	{
 		std::stringstream buffer;
 		buffer << fileStream.rdbuf();
 		shaderCode = buffer.str();
 		fileStream.close();
-		//const char* shaderCodeCStr = shaderCode.c_str();
-		/*
-		int success;
-		glGetShaderiv(shaderID, GL_COMPILE_STATUS, &success);
-		if (!success)
-		{
-			char infoLog[512];
-			glGetShaderInfoLog(shaderID, 512, nullptr, infoLog);
-			throw std::runtime_error(std::string("Shader Compilation Error: ") + infoLog);
-		}
-		glAttachShader(m_programID, shaderID);
-		m_attachedShaders[shaderType] = shaderID;
-		*/	
 	}
 	else
 	{
@@ -75,6 +63,17 @@ void ShaderProgram::attach(const wchar_t* filePath, ShaderType shaderType)
 
 	glCompileShader(shaderID);
 
+	// Check for compilation errors
+	int success;
+	char infoLog[512];
+	glGetShaderiv(shaderID, GL_COMPILE_STATUS, &success);
+	if (!success)
+	{
+		glGetShaderInfoLog(shaderID, 512, nullptr, infoLog);
+		glDeleteShader(shaderID);
+		throw std::runtime_error(std::string("Shader Compilation Error: ") + infoLog);
+	}
+
 	glAttachShader(m_programID, shaderID);
 	m_attachedShaders[shaderType] = shaderID;
 }
@@ -82,4 +81,14 @@ void ShaderProgram::attach(const wchar_t* filePath, ShaderType shaderType)
 void ShaderProgram::link()
 {
 	glLinkProgram(m_programID);
+
+	// Check for linking errors
+	int success;
+	char infoLog[512];
+	glGetProgramiv(m_programID, GL_LINK_STATUS, &success);
+	if (!success)
+	{
+		glGetProgramInfoLog(m_programID, 512, nullptr, infoLog);
+		throw std::runtime_error(std::string("Shader Linking Error: ") + infoLog);
+	}
 }

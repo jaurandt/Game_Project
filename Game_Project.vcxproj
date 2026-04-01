@@ -146,7 +146,6 @@
       <LanguageStandard_C Condition="'$(Configuration)|$(Platform)'=='Release|x64'">stdc17</LanguageStandard_C>
     </ClCompile>
     <ClCompile Include="OGL3D\vendor\glad\src\glad_wgl.c" />
-    <ClCompile Include="OGL3D\source\OGL3D\Math\Vec4.cpp" />
     <ClCompile Include="OGL3D\source\OGL3D\Graphics\VertexArrayObject.cpp" />
     <ClCompile Include="OGL3D\source\OGL3D\Graphics\ShaderProgram.cpp" />
     <ClCompile Include="OGL3D\source\OGL3D\Graphics\UniformBuffer.cpp" />

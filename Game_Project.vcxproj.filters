@@ -33,9 +33,6 @@
     <ClCompile Include="OGL3D\vendor\glad\src\glad_wgl.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OGL3D\source\OGL3D\Math\Vec4.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="OGL3D\source\OGL3D\Graphics\VertexArrayObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
