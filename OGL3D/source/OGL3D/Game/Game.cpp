@@ -180,14 +180,14 @@ void Game::onUpdate(InputMouse mouse)
 
 	auto deltaTime = static_cast<float>(m_elapsedSeconds.count());
 
-	m_scale = m_scale + (3.1415927f * deltaTime);
-
-	m_sinScale = sinf(m_scale);
-	m_cosScale = cosf(m_scale);
-
-	//rotate camera around the cube's center point
+	//rotate camera around the cube's center point while left mouse is held
 	if (mouse == InputMouse::LeftButtonDown)
 	{
+		m_scale = m_scale + (3.1415927f * deltaTime);
+
+		m_sinScale = sinf(m_scale);
+		m_cosScale = cosf(m_scale);
+
 		m_viewMatrix->setLookAt(
 			Vec4(3.0f * m_sinScale, 0.0f, 3.0f * m_cosScale, 1.0f), // Eye
 			Vec4(0.0f, 0.0f, 0.0f, 1.0f), // Center
